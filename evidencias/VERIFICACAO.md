@@ -6,7 +6,7 @@ Data: 19/10/2026. Ambiente: macOS 26.6.2, Google Chrome 155 (headless, via DevTo
 
 ## Como repetir
 
-1. Na raiz do projeto, rode `python3 -m http.server 8765`.
+1. Na raiz do projeto, rode `python3 -m http.server 8765 --bind 127.0.0.1` (o `--bind` impede que a pasta fique acessível na rede local).
 2. Crie uma pasta de arquivos de teste **fora do repositório** com:
    - `conta-teste.pdf`: um PDF pequeno qualquer;
    - `arquivo.txt`: um texto qualquer;
@@ -15,7 +15,7 @@ Data: 19/10/2026. Ambiente: macOS 26.6.2, Google Chrome 155 (headless, via DevTo
    Esses anexos de teste não entram no repositório.
 3. Rode:
    ```bash
-   node --experimental-websocket evidencias/verificar.mjs http://localhost:8765/ evidencias <pasta-dos-arquivos-de-teste>
+   node --experimental-websocket evidencias/verificar.mjs http://127.0.0.1:8765/ evidencias <pasta-dos-arquivos-de-teste>
    ```
 
 O script [`verificar.mjs`](verificar.mjs) não tem dependências: ele abre o Chrome em modo headless, tira as capturas e grava o JSON.
@@ -113,7 +113,11 @@ Ficaram fora, por decisão registrada no `SPEC.md`: ticket médio, sistema típi
 
 ## Pendências
 
-- **A página ainda não está publicada.** Ela será publicada na Vercel (configuração em `vercel.json` e passo a passo no `README.md`). Depois de publicar, falta conferir a URL no celular e no desktop.
+- **A página ainda não está publicada.** Ela será publicada na Vercel (configuração em `vercel.json` e passo a passo no `README.md`). Depois de publicar, falta conferir na URL:
+  - a página no celular e no desktop;
+  - que só a página está no ar: `/assets/css/styles.css`, `/assets/js/main.js` e `/material/logo.svg` respondem 200, e `/SPEC.md`, `/README.md`, `/evidencias/VERIFICACAO.md`, `/material/logo.png` e `/.vercelignore` respondem 404;
+  - os cabeçalhos do `vercel.json` (`X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy`), por exemplo com `curl -sI <url>`;
+  - que `/index.html` redireciona para `/` (URLs limpas).
 - **O repositório [Ericboot10/ravena-solar-case](https://github.com/Ericboot10/ravena-solar-case) não inclui o `brief.md`**, que é material da prática; ele fica só na máquina local.
 - **O formulário não tem destino real**, por decisão do SPEC (somente front-end). Não houve, nem pode haver, "recebimento real da solicitação". A página avisa que é uma demonstração.
 - **Testado só no Chrome.** Faltam Safari (macOS e iPhone real), Firefox e leitores de tela reais (VoiceOver, NVDA). A acessibilidade foi checada pela estrutura (labels, `aria-*`, ordem de foco, contraste), não com um leitor de tela.

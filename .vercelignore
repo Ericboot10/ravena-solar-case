@@ -1,10 +1,12 @@
+# Lista de permissão: tudo fica fora do site, exceto o que está liberado abaixo.
 # Só a página vai ao ar: index.html, assets/ e material/logo.svg.
-# A documentação e as evidências ficam no repositório, não no site.
-SPEC.md
-CLAUDE.md
-DESIGN.md
-README.md
-evidencias/
-material/logo.png
-brief.md
-.claude/
+# A documentação, as evidências, o brief e anexos de teste ficam fora.
+# Arquivo novo que precise ir ao ar tem de ser liberado aqui com "!".
+/*
+!/index.html
+!/assets
+!/material
+/material/*
+!/material/logo.svg
+# Configuração da Vercel (URLs limpas e cabeçalhos)
+!/vercel.json

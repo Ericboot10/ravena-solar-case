@@ -21,10 +21,10 @@ Landing page de energia solar residencial para a Ravena Solar, integradora de So
 ## Rodar localmente
 
 ```bash
-python3 -m http.server 8765
+python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
-Depois, abra http://localhost:8765.
+Depois, abra http://127.0.0.1:8765. O `--bind` impede que a pasta do projeto fique acessível para outras máquinas da rede.
 
 ## Publicar na Vercel
 
@@ -33,11 +33,13 @@ Depois, abra http://localhost:8765.
 3. Deixe **Build Command** vazio e **Output Directory** como a raiz (`.`).
 4. Clique em **Deploy**.
 
-O `.vercelignore` publica só a página (`index.html`, `assets/` e a logo). A documentação e as evidências ficam apenas no repositório. O `vercel.json` ativa URLs limpas e cabeçalhos básicos de segurança.
+O `.vercelignore` é uma lista de permissão: só `index.html`, `assets/`, `material/logo.svg` e o `vercel.json` vão para a Vercel. A documentação, as evidências e qualquer arquivo novo ficam fora até serem liberados nele. O `vercel.json` configura URLs limpas e cabeçalhos básicos de segurança.
+
+Isso ainda não foi conferido em produção: depois do primeiro deploy, siga as checagens listadas em "Pendências" no [`evidencias/VERIFICACAO.md`](evidencias/VERIFICACAO.md).
 
 ## Verificação
 
-Veja [`evidencias/VERIFICACAO.md`](evidencias/VERIFICACAO.md): 55 testes automatizados, capturas, contraste, comparação das promessas com o brief e pendências.
+Veja [`evidencias/VERIFICACAO.md`](evidencias/VERIFICACAO.md): testes automatizados, capturas, contraste, comparação das promessas com o brief e pendências.
 
 ## Limites desta entrega
 

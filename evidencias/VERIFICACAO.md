@@ -126,9 +126,23 @@ A página está publicada na Vercel em <https://ravena-solar-case.vercel.app/>. 
 
 Os deploys de prévia (branches e pull requests) ficam atrás da proteção de deploy da Vercel e pedem login; a conferência foi feita só em produção.
 
+### Página publicada no celular e no desktop
+
+Também em 19/10/2026, a mesma bateria de testes rodou contra a URL de produção:
+
+```bash
+node --experimental-websocket evidencias/verificar.mjs https://ravena-solar-case.vercel.app/ evidencias/producao <pasta-dos-arquivos-de-teste>
+```
+
+**Resultado: 55 de 55 testes passaram em produção.** Os detalhes estão em [`producao/resultados-testes.json`](producao/resultados-testes.json), e as 28 capturas da página no ar estão em `producao/capturas/celular/` (390 × 844) e `producao/capturas/desktop/` (1440 × 900), com os mesmos nomes da tabela de capturas acima.
+
+Antes disso, uma conferência com `curl` mostrou que o `index.html`, o `styles.css` e o `main.js` publicados são idênticos, byte a byte, aos do repositório.
+
+Em produção, o envio do formulário também não fez nenhuma requisição de rede, e o console não mostrou nenhum erro de JavaScript. Também não houve rolagem lateral em nenhuma das larguras testadas, de 320 a 1920px.
+
 ## Pendências
 
-- **Conferir a página publicada no celular e no desktop.** A URL de produção só foi checada por `curl` (respostas e cabeçalhos); a página no ar ainda não foi vista em um celular nem em um navegador de desktop.
+- **Celular e desktop reais:** a página publicada foi testada no Chrome com emulação de celular (390 × 844) e em desktop (1440 × 900), mas não em um aparelho físico.
 - **O repositório [Ericboot10/ravena-solar-case](https://github.com/Ericboot10/ravena-solar-case) não inclui o `brief.md`**, que é material da prática; ele fica só na máquina local.
 - **O formulário não tem destino real**, por decisão do SPEC (somente front-end). Não houve, nem pode haver, "recebimento real da solicitação". A página avisa que é uma demonstração.
 - **Testado só no Chrome.** Faltam Safari (macOS e iPhone real), Firefox e leitores de tela reais (VoiceOver, NVDA). A acessibilidade foi checada pela estrutura (labels, `aria-*`, ordem de foco, contraste), não com um leitor de tela.

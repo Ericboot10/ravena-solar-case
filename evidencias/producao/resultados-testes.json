@@ -1,0 +1,802 @@
+{
+  "data": "2026-10-19T13:52:41.593Z",
+  "url": "https://ravena-solar-case.vercel.app/",
+  "testes": [
+    {
+      "grupo": "Layout",
+      "nome": "Sem corte ou rolagem lateral em 320px",
+      "ok": true,
+      "detalhe": {
+        "sw": 320,
+        "vw": 320,
+        "over": [],
+        "headerBtnLines": 44
+      }
+    },
+    {
+      "grupo": "Layout",
+      "nome": "Sem corte ou rolagem lateral em 360px",
+      "ok": true,
+      "detalhe": {
+        "sw": 360,
+        "vw": 360,
+        "over": [],
+        "headerBtnLines": 44
+      }
+    },
+    {
+      "grupo": "Layout",
+      "nome": "Sem corte ou rolagem lateral em 390px",
+      "ok": true,
+      "detalhe": {
+        "sw": 390,
+        "vw": 390,
+        "over": [],
+        "headerBtnLines": 44
+      }
+    },
+    {
+      "grupo": "Layout",
+      "nome": "Sem corte ou rolagem lateral em 600px",
+      "ok": true,
+      "detalhe": {
+        "sw": 600,
+        "vw": 600,
+        "over": [],
+        "headerBtnLines": 44
+      }
+    },
+    {
+      "grupo": "Layout",
+      "nome": "Sem corte ou rolagem lateral em 768px",
+      "ok": true,
+      "detalhe": {
+        "sw": 768,
+        "vw": 768,
+        "over": [],
+        "headerBtnLines": 44
+      }
+    },
+    {
+      "grupo": "Layout",
+      "nome": "Sem corte ou rolagem lateral em 960px",
+      "ok": true,
+      "detalhe": {
+        "sw": 960,
+        "vw": 960,
+        "over": [],
+        "headerBtnLines": 44
+      }
+    },
+    {
+      "grupo": "Layout",
+      "nome": "Sem corte ou rolagem lateral em 1024px",
+      "ok": true,
+      "detalhe": {
+        "sw": 1024,
+        "vw": 1024,
+        "over": [],
+        "headerBtnLines": 44
+      }
+    },
+    {
+      "grupo": "Layout",
+      "nome": "Sem corte ou rolagem lateral em 1280px",
+      "ok": true,
+      "detalhe": {
+        "sw": 1280,
+        "vw": 1280,
+        "over": [],
+        "headerBtnLines": 44
+      }
+    },
+    {
+      "grupo": "Layout",
+      "nome": "Sem corte ou rolagem lateral em 1440px",
+      "ok": true,
+      "detalhe": {
+        "sw": 1440,
+        "vw": 1440,
+        "over": [],
+        "headerBtnLines": 44
+      }
+    },
+    {
+      "grupo": "Layout",
+      "nome": "Sem corte ou rolagem lateral em 1920px",
+      "ok": true,
+      "detalhe": {
+        "sw": 1920,
+        "vw": 1920,
+        "over": [],
+        "headerBtnLines": 44
+      }
+    },
+    {
+      "grupo": "Cabeçalho",
+      "nome": "Botão \"Pedir minha simulação\" visível em toda a rolagem",
+      "ok": true,
+      "detalhe": [
+        {
+          "f": 0,
+          "btnTop": 10,
+          "visivel": true,
+          "progresso": "matrix(0, 0, 0, 1, 0, 0)"
+        },
+        {
+          "f": 0.25,
+          "btnTop": 10,
+          "visivel": true,
+          "progresso": "matrix(0.25, 0, 0, 1, 0, 0)"
+        },
+        {
+          "f": 0.5,
+          "btnTop": 10,
+          "visivel": true,
+          "progresso": "matrix(0.5, 0, 0, 1, 0, 0)"
+        },
+        {
+          "f": 0.75,
+          "btnTop": 10,
+          "visivel": true,
+          "progresso": "matrix(0.75, 0, 0, 1, 0, 0)"
+        },
+        {
+          "f": 1,
+          "btnTop": 10,
+          "visivel": true,
+          "progresso": "matrix(1, 0, 0, 1, 0, 0)"
+        }
+      ]
+    },
+    {
+      "grupo": "Cabeçalho",
+      "nome": "Barra de progresso avança com a rolagem (0 → 1)",
+      "ok": true,
+      "detalhe": [
+        "matrix(0, 0, 0, 1, 0, 0)",
+        "matrix(0.25, 0, 0, 1, 0, 0)",
+        "matrix(0.5, 0, 0, 1, 0, 0)",
+        "matrix(0.75, 0, 0, 1, 0, 0)",
+        "matrix(1, 0, 0, 1, 0, 0)"
+      ]
+    },
+    {
+      "grupo": "Links",
+      "nome": "Todos os 11 links internos têm destino",
+      "ok": true,
+      "detalhe": [
+        {
+          "href": "#conteudo",
+          "texto": "Pular para o conteúdo",
+          "existe": true
+        },
+        {
+          "href": "#topo",
+          "texto": "",
+          "existe": true
+        },
+        {
+          "href": "#provas",
+          "texto": "Provas",
+          "existe": true
+        },
+        {
+          "href": "#caso",
+          "texto": "Caso real",
+          "existe": true
+        },
+        {
+          "href": "#investimento",
+          "texto": "Investimento",
+          "existe": true
+        },
+        {
+          "href": "#execucao",
+          "texto": "Prazos e garantias",
+          "existe": true
+        },
+        {
+          "href": "#duvidas",
+          "texto": "Dúvidas",
+          "existe": true
+        },
+        {
+          "href": "#simulacao",
+          "texto": "Pedir minha simulação",
+          "existe": true
+        },
+        {
+          "href": "#simulacao",
+          "texto": "Pedir minha simulação",
+          "existe": true
+        },
+        {
+          "href": "#caso",
+          "texto": "Ver o caso de Sorocaba",
+          "existe": true
+        },
+        {
+          "href": "#simulacao",
+          "texto": "Quero o cálculo para a minha casa",
+          "existe": true
+        }
+      ]
+    },
+    {
+      "grupo": "Botões",
+      "nome": "\".btn--header\" leva ao formulário e foca o campo Nome",
+      "ok": true,
+      "detalhe": {
+        "foco": "nome",
+        "topoSecao": 80,
+        "hash": "#simulacao"
+      }
+    },
+    {
+      "grupo": "Botões",
+      "nome": "\".hero__actions .btn--primary\" leva ao formulário e foca o campo Nome",
+      "ok": true,
+      "detalhe": {
+        "foco": "nome",
+        "topoSecao": 81,
+        "hash": "#simulacao"
+      }
+    },
+    {
+      "grupo": "Botões",
+      "nome": "\".inv__side .link-arrow\" leva ao formulário e foca o campo Nome",
+      "ok": true,
+      "detalhe": {
+        "foco": "nome",
+        "topoSecao": 80,
+        "hash": "#simulacao"
+      }
+    },
+    {
+      "grupo": "FAQ",
+      "nome": "As 7 perguntas abrem e fecham por clique",
+      "ok": true,
+      "detalhe": [
+        {
+          "pergunta": "Como sei que vocês não vão sumir daqui a dois anos?",
+          "aberto": true,
+          "fechado": true
+        },
+        {
+          "pergunta": "A instalação pode estragar meu telhado?",
+          "aberto": true,
+          "fechado": true
+        },
+        {
+          "pergunta": "Ouvi dizer que “taxaram o sol”. Ainda vale a pena?",
+          "aberto": true,
+          "fechado": true
+        },
+        {
+          "pergunta": "E se eu mudar de casa?",
+          "aberto": true,
+          "fechado": true
+        },
+        {
+          "pergunta": "E em dia nublado?",
+          "aberto": true,
+          "fechado": true
+        },
+        {
+          "pergunta": "E à noite?",
+          "aberto": true,
+          "fechado": true
+        },
+        {
+          "pergunta": "Preciso de bateria?",
+          "aberto": true,
+          "fechado": true
+        }
+      ]
+    },
+    {
+      "grupo": "FAQ",
+      "nome": "Abre com Enter e fecha com Espaço",
+      "ok": true,
+      "detalhe": {
+        "enter": "true",
+        "espaco": "false"
+      }
+    },
+    {
+      "grupo": "Teclado",
+      "nome": "Tab percorre pular-conteúdo, logo, menu e botões com foco visível",
+      "ok": true,
+      "detalhe": [
+        {
+          "el": "a",
+          "texto": "Pular para o conteúdo",
+          "contorno": "solid 2px rgb(18, 58, 85)"
+        },
+        {
+          "el": "a",
+          "texto": "",
+          "contorno": "solid 2px rgb(18, 58, 85)"
+        },
+        {
+          "el": "a",
+          "texto": "Provas",
+          "contorno": "solid 2px rgb(18, 58, 85)"
+        },
+        {
+          "el": "a",
+          "texto": "Caso real",
+          "contorno": "solid 2px rgb(18, 58, 85)"
+        },
+        {
+          "el": "a",
+          "texto": "Investimento",
+          "contorno": "solid 2px rgb(18, 58, 85)"
+        },
+        {
+          "el": "a",
+          "texto": "Prazos e garantias",
+          "contorno": "solid 2px rgb(18, 58, 85)"
+        },
+        {
+          "el": "a",
+          "texto": "Dúvidas",
+          "contorno": "solid 2px rgb(18, 58, 85)"
+        },
+        {
+          "el": "a",
+          "texto": "Pedir minha simulação",
+          "contorno": "solid 2px rgb(18, 58, 85)"
+        },
+        {
+          "el": "a",
+          "texto": "Pedir minha simulação",
+          "contorno": "solid 2px rgb(18, 58, 85)"
+        },
+        {
+          "el": "a",
+          "texto": "Ver o caso de Sorocaba",
+          "contorno": "solid 2px rgb(18, 58, 85)"
+        },
+        {
+          "el": "input#calc-conta",
+          "texto": "",
+          "contorno": "solid 2px rgb(18, 58, 85)"
+        },
+        {
+          "el": "a",
+          "texto": "Quero o cálculo para a minha casa",
+          "contorno": "solid 2px rgb(18, 58, 85)"
+        }
+      ]
+    },
+    {
+      "grupo": "Teclado",
+      "nome": "Ordem de Tab no formulário segue a ordem visual",
+      "ok": true,
+      "detalhe": {
+        "aPartirDeNome": [
+          "whatsapp",
+          "cidade",
+          "conta",
+          "arquivo",
+          "Pedir minha simulação"
+        ],
+        "ok": true
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Envio vazio mostra os 4 erros obrigatórios e o resumo recebe foco",
+      "ok": true,
+      "detalhe": {
+        "values": {
+          "nome": "",
+          "whatsapp": "",
+          "cidade": "",
+          "conta": ""
+        },
+        "errors": {
+          "nome": "Informe seu nome.",
+          "whatsapp": "Informe seu WhatsApp com DDD.",
+          "cidade": "Selecione sua cidade.",
+          "conta": "Informe o valor médio da sua conta de luz."
+        },
+        "invalid": [
+          "nome",
+          "whatsapp",
+          "cidade",
+          "conta"
+        ],
+        "summaryVisible": true,
+        "summary": [
+          "Informe seu nome.",
+          "Informe seu WhatsApp com DDD.",
+          "Selecione sua cidade.",
+          "Informe o valor médio da sua conta de luz."
+        ],
+        "belowNotice": false,
+        "formHidden": false,
+        "successVisible": false,
+        "successText": "\n            Dados conferidos, .\n            Próximo passo: a resposta acontece por WhatsApp, no mesmo dia útil. Depois, a visita técnica ao seu telhado é sem compromisso.\n            Versão de demonstração: nenhum dado foi enviado à Ravena Solar.\n            Revisar meus dados\n          ",
+        "active": "form-resumo"
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Erro claro: Nome com 1 letra",
+      "ok": true,
+      "detalhe": {
+        "erro": "O nome precisa ter pelo menos 2 letras.",
+        "valores": {
+          "nome": "A",
+          "whatsapp": "(15) 99123-4567",
+          "cidade": "Itu",
+          "conta": "800"
+        }
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Erro claro: WhatsApp com 9 dígitos",
+      "ok": true,
+      "detalhe": {
+        "erro": "Use o formato (15) 99999-9999, com DDD.",
+        "valores": {
+          "nome": "Ana Teste",
+          "whatsapp": "(15) 9912-345",
+          "cidade": "Itu",
+          "conta": "800"
+        }
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Erro claro: Celular de 11 dígitos sem 9 após o DDD",
+      "ok": true,
+      "detalhe": {
+        "erro": "Celular com 11 dígitos deve começar com 9 depois do DDD.",
+        "valores": {
+          "nome": "Ana Teste",
+          "whatsapp": "(15) 89123-4567",
+          "cidade": "Itu",
+          "conta": "800"
+        }
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Erro claro: Conta com letras",
+      "ok": true,
+      "detalhe": {
+        "erro": "Use apenas números, por exemplo 650 ou 1.200,50.",
+        "valores": {
+          "nome": "Ana Teste",
+          "whatsapp": "(15) 99123-4567",
+          "cidade": "Itu",
+          "conta": "abc"
+        }
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Erro claro: Conta igual a zero",
+      "ok": true,
+      "detalhe": {
+        "erro": "Use apenas números, por exemplo 650 ou 1.200,50.",
+        "valores": {
+          "nome": "Ana Teste",
+          "whatsapp": "(15) 99123-4567",
+          "cidade": "Itu",
+          "conta": "0"
+        }
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Erro claro: Conta acima de R$ 100 mil",
+      "ok": true,
+      "detalhe": {
+        "erro": "Confira o valor: parece alto demais para uma conta residencial.",
+        "valores": {
+          "nome": "Ana Teste",
+          "whatsapp": "(15) 99123-4567",
+          "cidade": "Itu",
+          "conta": "200000"
+        }
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Dados digitados são preservados após erro",
+      "ok": true,
+      "detalhe": {
+        "nome": "Ana Teste",
+        "whatsapp": "(15) 999",
+        "cidade": "",
+        "conta": "1.200,50"
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Valor \"1.200,50\" é aceito",
+      "ok": true,
+      "detalhe": {
+        "whatsapp": "Use o formato (15) 99999-9999, com DDD.",
+        "cidade": "Selecione sua cidade."
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Máscara do WhatsApp aplicada",
+      "ok": true,
+      "detalhe": "(15) 999"
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Conta abaixo de R$ 450 mostra aviso sem bloquear",
+      "ok": true,
+      "detalhe": {
+        "aviso": true
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Conta de R$ 300 ainda pode ser enviada",
+      "ok": true,
+      "detalhe": {
+        "sucesso": true
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Arquivo .txt é recusado",
+      "ok": true,
+      "detalhe": {
+        "erro": "Envie uma foto (JPG, PNG, HEIC) ou um PDF.",
+        "arquivoMostrado": "arquivo.txt"
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "PDF acima de 10 MB é recusado",
+      "ok": true,
+      "detalhe": {
+        "erro": "O arquivo tem mais de 10 MB. Envie uma versão menor.",
+        "arquivoMostrado": "grande.pdf"
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "PDF pequeno é aceito",
+      "ok": true,
+      "detalhe": {
+        "erro": null,
+        "arquivoMostrado": "conta-teste.pdf"
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Sucesso mostra WhatsApp no mesmo dia útil e visita sem compromisso",
+      "ok": true,
+      "detalhe": "Dados conferidos, Ana.\n\nPróximo passo: a resposta acontece por WhatsApp, no mesmo dia útil. Depois, a visita técnica ao seu telhado é sem compromisso.\n\nVersão de demonstração: nenhum dado foi enviado à Ravena Solar.\n\nRevisar meus dados"
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Sucesso deixa claro que nada foi enviado (demonstração)",
+      "ok": true,
+      "detalhe": "Dados conferidos, Ana.\n\nPróximo passo: a resposta acontece por WhatsApp, no mesmo dia útil. Depois, a visita técnica ao seu telhado é sem compromisso.\n\nVersão de demonstração: nenhum dado foi enviado à Ravena Solar.\n\nRevisar meus dados"
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Nenhuma requisição de rede ao enviar (somente front-end)",
+      "ok": true,
+      "detalhe": []
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "\"Revisar meus dados\" volta ao formulário com os dados",
+      "ok": true,
+      "detalhe": {
+        "nome": "Ana Teste",
+        "whatsapp": "(15) 99123-4567",
+        "cidade": "Votorantim",
+        "conta": "650"
+      }
+    },
+    {
+      "grupo": "Calculadora",
+      "nome": "R$ 600 → economia de R$ 450 a R$ 540 por mês (75% a 90%)",
+      "ok": true,
+      "detalhe": {
+        "depois": "R$ 60 a R$ 150",
+        "mes": "R$ 450 a R$ 540",
+        "aviso": false
+      }
+    },
+    {
+      "grupo": "Calculadora",
+      "nome": "Aviso aparece abaixo de R$ 450 e some a partir de R$ 450",
+      "ok": true,
+      "detalhe": {
+        "440": {
+          "depois": "R$ 40 a R$ 110",
+          "mes": "R$ 330 a R$ 400",
+          "aviso": true
+        },
+        "450": {
+          "depois": "R$ 40 a R$ 110",
+          "mes": "R$ 340 a R$ 410",
+          "aviso": false
+        },
+        "600": {
+          "depois": "R$ 60 a R$ 150",
+          "mes": "R$ 450 a R$ 540",
+          "aviso": false
+        },
+        "2000": {
+          "depois": "R$ 200 a R$ 500",
+          "mes": "R$ 1.500 a R$ 1.800",
+          "aviso": false
+        }
+      }
+    },
+    {
+      "grupo": "Caso real",
+      "nome": "Gráfico vai de R$ 780 a R$ 118 conforme a rolagem",
+      "ok": true,
+      "detalhe": {
+        "inicio": "R$ 780",
+        "meio": "R$ 200",
+        "fim": {
+          "conta": "R$ 118",
+          "reducao": "85%",
+          "mes": "R$ 662",
+          "ano": "R$ 7.944"
+        }
+      }
+    },
+    {
+      "grupo": "Caso real",
+      "nome": "Valores finais: 85%, R$ 662/mês, R$ 7.944 em 12 meses",
+      "ok": true,
+      "detalhe": {
+        "conta": "R$ 118",
+        "reducao": "85%",
+        "mes": "R$ 662",
+        "ano": "R$ 7.944"
+      }
+    },
+    {
+      "grupo": "Execução",
+      "nome": "Trilha marca as etapas uma a uma ao rolar (0 → 4)",
+      "ok": true,
+      "detalhe": {
+        "etapasConcluidas": [
+          0,
+          2,
+          3,
+          4,
+          4
+        ]
+      }
+    },
+    {
+      "grupo": "Provas",
+      "nome": "Contadores terminam em 412, 4,8, 6 e 11",
+      "ok": true,
+      "detalhe": [
+        "412",
+        "4,8",
+        "6",
+        "11"
+      ]
+    },
+    {
+      "grupo": "Movimento reduzido",
+      "nome": "Tudo aparece no estado final, sem trilho fixo nem animação",
+      "ok": true,
+      "detalhe": {
+        "caso": "R$ 118",
+        "etapas": 4,
+        "trilhoFixo": "relative",
+        "revelados": true,
+        "contadores": [
+          "412",
+          "4,8",
+          "6",
+          "11"
+        ]
+      }
+    },
+    {
+      "grupo": "Sem JavaScript",
+      "nome": "Conteúdo legível e valores finais no HTML",
+      "ok": true,
+      "detalhe": {
+        "temClasseJs": false,
+        "revelados": true,
+        "caso": "R$ 118",
+        "contadores": [
+          "412",
+          "4,8",
+          "6",
+          "11"
+        ]
+      }
+    },
+    {
+      "grupo": "Promessas",
+      "nome": "Nenhum termo proibido ou dado deixado de fora aparece na página",
+      "ok": true,
+      "detalhe": []
+    },
+    {
+      "grupo": "Promessas",
+      "nome": "Todos os dados exigidos pelo SPEC aparecem na página",
+      "ok": true,
+      "detalhe": {
+        "faltando": []
+      }
+    },
+    {
+      "grupo": "Tipografia",
+      "nome": "Uma única família de fonte (Georgia) em toda a página",
+      "ok": true,
+      "detalhe": [
+        "Georgia, \"Times New Roman\", serif"
+      ]
+    },
+    {
+      "grupo": "Tipografia",
+      "nome": "Só pesos 400 e 700",
+      "ok": true,
+      "detalhe": [
+        "400",
+        "700"
+      ]
+    },
+    {
+      "grupo": "Tipografia",
+      "nome": "Nenhum texto abaixo de 12px",
+      "ok": true,
+      "detalhe": []
+    },
+    {
+      "grupo": "Tipografia",
+      "nome": "Teste de tabular-nums em Georgia (informativo)",
+      "ok": true,
+      "detalhe": {
+        "normal": {
+          "111": 129,
+          "000": 184
+        },
+        "tabular": {
+          "111": 129,
+          "000": 184
+        },
+        "conclusao": "tabular-nums NÃO tem efeito em Georgia; dígitos têm larguras diferentes"
+      }
+    },
+    {
+      "grupo": "Cor",
+      "nome": "Amarelo só em botões primários, barra de progresso e trilha",
+      "ok": true,
+      "detalhe": [
+        "a.btn.btn--primary.btn--header",
+        "span.progress__fill",
+        "a.btn.btn--primary.btn--lg",
+        "span.trail__fill",
+        "button.btn.btn--primary.btn--lg.btn--block"
+      ]
+    },
+    {
+      "grupo": "Console",
+      "nome": "Nenhum erro de JavaScript no console",
+      "ok": true,
+      "detalhe": []
+    }
+  ],
+  "consoleErrors": []
+}

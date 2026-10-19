@@ -1,0 +1,15 @@
+# Material de terceiros (brief da prática): fica só na máquina local
+brief.md
+
+# Configuração local do Claude Code
+.claude/
+
+# Anexos e arquivos de teste do formulário nunca entram no repositório
+fixtures/
+uploads/
+*.pdf
+
+# Sistema
+.DS_Store
+node_modules/
+*.log

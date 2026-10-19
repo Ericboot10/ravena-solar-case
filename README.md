@@ -35,7 +35,7 @@ Depois, abra http://127.0.0.1:8765. O `--bind` impede que a pasta do projeto fiq
 
 O `.vercelignore` é uma lista de permissão: só `index.html`, `assets/`, `material/logo.svg` e o `vercel.json` vão para a Vercel. A documentação, as evidências e qualquer arquivo novo ficam fora até serem liberados nele. O `vercel.json` configura URLs limpas e cabeçalhos básicos de segurança.
 
-Isso ainda não foi conferido em produção: depois do primeiro deploy, siga as checagens listadas em "Pendências" no [`evidencias/VERIFICACAO.md`](evidencias/VERIFICACAO.md).
+A página está no ar em <https://ravena-solar-case.vercel.app/>. As respostas e os cabeçalhos de produção foram conferidos; o resultado está na seção "Publicação" do [`evidencias/VERIFICACAO.md`](evidencias/VERIFICACAO.md).
 
 ## Verificação
 

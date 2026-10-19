@@ -111,13 +111,24 @@ Ficaram fora, por decisão registrada no `SPEC.md`: ticket médio, sistema típi
 7. O botão de arquivo aparecia em inglês ("Choose File"). Foi substituído por "Escolher arquivo".
 8. O campo de valor tinha borda dupla, e o "R$ 7.944" tinha um espaço grande antes do número. Os dois foram corrigidos.
 
+## Publicação
+
+A página está publicada na Vercel em <https://ravena-solar-case.vercel.app/>. Em 19/10/2026, logo após o deploy de produção do commit `2e988fb` (lista de permissão no `.vercelignore`), as respostas da URL foram conferidas com `curl`:
+
+| Verificação | Resultado |
+|---|---|
+| `/`, `/assets/css/styles.css`, `/assets/js/main.js`, `/material/logo.svg` | 200 |
+| `/SPEC.md`, `/README.md`, `/CLAUDE.md`, `/DESIGN.md`, `/brief.md` | 404 |
+| `/evidencias/VERIFICACAO.md`, `/evidencias/verificar.mjs`, `/evidencias/resultados-testes.json` | 404 |
+| `/material/logo.png`, `/.vercelignore`, `/vercel.json`, `/.gitignore`, `/.claude/launch.json` | 404 |
+| `/index.html` e `/index` | 308 para `/` (URLs limpas) |
+| Cabeçalhos em `/` | `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY`, `Permissions-Policy: camera=(), microphone=(), geolocation=()` presentes |
+
+Os deploys de prévia (branches e pull requests) ficam atrás da proteção de deploy da Vercel e pedem login; a conferência foi feita só em produção.
+
 ## Pendências
 
-- **A página ainda não está publicada.** Ela será publicada na Vercel (configuração em `vercel.json` e passo a passo no `README.md`). Depois de publicar, falta conferir na URL:
-  - a página no celular e no desktop;
-  - que só a página está no ar: `/assets/css/styles.css`, `/assets/js/main.js` e `/material/logo.svg` respondem 200, e `/SPEC.md`, `/README.md`, `/evidencias/VERIFICACAO.md`, `/material/logo.png` e `/.vercelignore` respondem 404;
-  - os cabeçalhos do `vercel.json` (`X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy`), por exemplo com `curl -sI <url>`;
-  - que `/index.html` redireciona para `/` (URLs limpas).
+- **Conferir a página publicada no celular e no desktop.** A URL de produção só foi checada por `curl` (respostas e cabeçalhos); a página no ar ainda não foi vista em um celular nem em um navegador de desktop.
 - **O repositório [Ericboot10/ravena-solar-case](https://github.com/Ericboot10/ravena-solar-case) não inclui o `brief.md`**, que é material da prática; ele fica só na máquina local.
 - **O formulário não tem destino real**, por decisão do SPEC (somente front-end). Não houve, nem pode haver, "recebimento real da solicitação". A página avisa que é uma demonstração.
 - **Testado só no Chrome.** Faltam Safari (macOS e iPhone real), Firefox e leitores de tela reais (VoiceOver, NVDA). A acessibilidade foi checada pela estrutura (labels, `aria-*`, ordem de foco, contraste), não com um leitor de tela.

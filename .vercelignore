@@ -1,0 +1,10 @@
+# Só a página vai ao ar: index.html, assets/ e material/logo.svg.
+# A documentação e as evidências ficam no repositório, não no site.
+SPEC.md
+CLAUDE.md
+DESIGN.md
+README.md
+evidencias/
+material/logo.png
+brief.md
+.claude/

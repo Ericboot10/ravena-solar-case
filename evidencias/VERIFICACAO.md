@@ -113,7 +113,7 @@ Ficaram fora, por decisão registrada no `SPEC.md`: ticket médio, sistema típi
 
 ## Pendências
 
-- **A página não está publicada.** O SPEC pede a página no ar; ainda não há URL.
+- **A página ainda não está publicada.** Ela será publicada na Vercel (configuração em `vercel.json` e passo a passo no `README.md`). Depois de publicar, falta conferir a URL no celular e no desktop.
 - **O repositório [Ericboot10/ravena-solar-case](https://github.com/Ericboot10/ravena-solar-case) não inclui o `brief.md`**, que é material da prática; ele fica só na máquina local.
 - **O formulário não tem destino real**, por decisão do SPEC (somente front-end). Não houve, nem pode haver, "recebimento real da solicitação". A página avisa que é uma demonstração.
 - **Testado só no Chrome.** Faltam Safari (macOS e iPhone real), Firefox e leitores de tela reais (VoiceOver, NVDA). A acessibilidade foi checada pela estrutura (labels, `aria-*`, ordem de foco, contraste), não com um leitor de tela.

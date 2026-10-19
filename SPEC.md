@@ -60,7 +60,7 @@ Salvar as decisões visuais em `DESIGN.md`, incluindo cores, tipografia, espaça
 
 ## Entrega e critérios de aceite
 
-Entregar a página publicada e o repositório público no GitHub, contendo `SPEC.md`, `CLAUDE.md`, `DESIGN.md` e evidências de verificação.
+Entregar a página publicada (na Vercel, como site estático) e o repositório público no GitHub, contendo `SPEC.md`, `CLAUDE.md`, `DESIGN.md` e evidências de verificação.
 
 Verificar e registrar:
 

@@ -41,6 +41,8 @@ Página que apresenta a Ravena Solar e mostra, com exemplos concretos, que a emp
 - Os botões da abertura e do cabeçalho rolam até o formulário no final da página.
 - O formulário é somente front-end: valida e mostra a mensagem de sucesso, mas não envia nem armazena nada. Não implementar backend nem serviço externo, e não apresentar a solicitação como recebida pela Ravena.
 - Anexos do formulário nunca entram no repositório.
+- Publicação: Vercel, como site estático sem build (`vercel.json`). O `.vercelignore` deixa só a página no ar. Arquivo novo que precise ir ao ar não pode estar listado nele.
+- Para rodar localmente: `python3 -m http.server 8765`.
 
 ## Regras de trabalho
 

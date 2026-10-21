@@ -4,7 +4,7 @@ Data: 19/10/2026, atualizada em 21/10/2026 com a integração do formulário com
 
 **Resultado: 62 de 62 testes automatizados da página e 13 de 13 testes do Apps Script passaram.** Os detalhes de cada teste da página estão em [`resultados-testes.json`](resultados-testes.json).
 
-O envio foi testado contra um **endpoint local que imita o app da Web do Apps Script** ([`endpoint-teste.py`](endpoint-teste.py)): ele recebe o POST, grava o que chegou e redireciona para a resposta, como o Google faz. O script do Apps Script foi testado em Node, com planilha, Drive e e-mail simulados ([`verificar-apps-script.mjs`](verificar-apps-script.mjs)). **Ainda falta o teste de ponta a ponta com a planilha real**, que depende da implantação na conta Google (ver "Pendências").
+O envio foi testado contra um **endpoint local que imita o app da Web do Apps Script** ([`endpoint-teste.py`](endpoint-teste.py)): ele recebe o POST, grava o que chegou e redireciona para a resposta, como o Google faz. O script do Apps Script foi testado em Node, com planilha, Drive e e-mail simulados ([`verificar-apps-script.mjs`](verificar-apps-script.mjs)). Em 21/10/2026, depois da implantação na conta Google, também foi feito o **teste de ponta a ponta com a planilha real** (ver "Integração real com a planilha").
 
 ## Como repetir
 
@@ -133,6 +133,19 @@ Testado em Node com os serviços do Google simulados: 13 de 13 testes passaram.
 
 Problema encontrado e corrigido nesta rodada: o teste do PDF de 4,4 MB travava o script de verificação, porque o Chrome repassava o corpo inteiro do POST (6 MB em base64) pela conexão de depuração. O `verificar.mjs` agora limita esse repasse (`maxPostDataSize`). O envio em si funcionava: o endpoint de teste recebeu o arquivo inteiro.
 
+## Integração real com a planilha
+
+Em 21/10/2026, o Apps Script foi implantado na conta Google da Ravena (planilha "Ravena Solar · Leads", projeto "Ravena Solar · Leads (site)"), como app da Web, com "Executar como: Eu" e "Quem pode acessar: Qualquer pessoa". A URL foi colocada no `data-endpoint` do formulário.
+
+| Verificação | Resultado |
+|---|---|
+| `GET` na URL do app, sem login | `{"ok":true,"servico":"Ravena Solar · simulações"}` |
+| Envio pela página local, sem anexo (Sorocaba, R$ 780) | Sucesso na página em 4 s; linha gravada com WhatsApp formatado, faixa "Sim" e status "Novo" |
+| Envio pela página local, com PDF (Itu, R$ 320, telefone fixo) | Sucesso na página em 7,5 s; linha gravada com faixa "Não" e link do arquivo no Drive |
+| Link do anexo aberto sem login | 401: o arquivo só abre na conta dona |
+
+Os dois pedidos de teste se chamam "(pode apagar)" e podem ser removidos da planilha. A primeira implantação saiu com "Quem pode acessar: Somente eu", e a URL pedia login; o acesso foi corrigido em "Gerenciar implantações" antes dos testes.
+
 ## Publicação
 
 > As conferências abaixo são da versão de 19/10/2026, ainda sem a integração com a planilha. A versão nova ainda não foi publicada.
@@ -168,8 +181,7 @@ Em produção, o envio do formulário também não fez nenhuma requisição de r
 
 - **Celular e desktop reais:** a página publicada foi testada no Chrome com emulação de celular (390 × 844) e em desktop (1440 × 900), mas não em um aparelho físico.
 - **O repositório [Ericboot10/ravena-solar-case](https://github.com/Ericboot10/ravena-solar-case) não inclui o `brief.md`**, que é material da prática; ele fica só na máquina local.
-- **Implantar o Apps Script e configurar a URL:** o `data-endpoint` do formulário está vazio até o app da Web ser implantado na conta Google (passo a passo em [`integracao/README.md`](../integracao/README.md)). Até lá, o formulário avisa que o envio está indisponível.
-- **Teste de ponta a ponta com a planilha real:** depois da implantação, enviar um pedido com e sem anexo e conferir a linha na planilha, o arquivo no Drive e o e-mail de aviso. Os testes desta rodada usaram um endpoint local e serviços simulados.
+- **E-mail de aviso:** os pedidos de teste chegaram à planilha e ao Drive, mas a chegada do e-mail na caixa de entrada não foi conferida daqui.
 - **WhatsApp:** a página diz que os dados vão ao WhatsApp da equipe, mas não há envio automático (decisão do case, registrada no `SPEC.md`). O aviso real é o e-mail.
 - **Publicar a versão nova** na Vercel e repetir a bateria em produção.
 - **Testado só no Chrome.** Faltam Safari (macOS e iPhone real), Firefox e leitores de tela reais (VoiceOver, NVDA). A acessibilidade foi checada pela estrutura (labels, `aria-*`, ordem de foco, contraste), não com um leitor de tela.

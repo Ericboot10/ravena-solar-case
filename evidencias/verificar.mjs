@@ -1,11 +1,13 @@
 // Verificação da landing page via Chrome DevTools Protocol (sem dependências).
-// Uso: node --experimental-websocket verify.mjs <url> <pasta-evidencias> <pasta-fixtures>
+// Uso: node --experimental-websocket verificar.mjs <url> <pasta-evidencias> <pasta-fixtures> <endpoint-de-teste> <log-do-endpoint>
+// O endpoint de teste imita o app da Web do Apps Script e grava cada envio, em JSON, no log.
 import { spawn } from 'node:child_process';
-import { mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdirSync, writeFileSync, rmSync, readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 
-const [, , URL_BASE, OUT, FIX] = process.argv;
+const [, , URL_BASE, OUT, FIX, MOCK, MOCK_LOG] = process.argv;
+const CLOSED = 'http://127.0.0.1:9/fechado'; // porta sem servidor: simula falha de rede
 const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PORT = 9333;
 const profile = join(process.env.SCRATCH || tmpdir(), 'chrome-profile-verify');
@@ -30,6 +32,7 @@ await getJSON('/json/version');
 const target = await getJSON('/json/new?about:blank', 'PUT');
 const ws = new WebSocket(target.webSocketDebuggerUrl);
 await new Promise((r) => ws.addEventListener('open', r));
+ws.addEventListener('close', () => { console.error('Conexão com o Chrome fechada'); process.exit(1); });
 
 let seq = 0;
 const pending = new Map();
@@ -64,7 +67,8 @@ listeners.push((m) => {
 
 await send('Page.enable');
 await send('Runtime.enable');
-await send('Network.enable');
+// Sem o corpo dos POSTs nos eventos: o anexo de 4,4 MB travaria a conexão com o Chrome.
+await send('Network.enable', { maxPostDataSize: 1024 });
 await send('DOM.enable');
 
 async function evaluate(expr) {
@@ -89,7 +93,13 @@ async function load(url = URL_BASE) {
   await send('Page.navigate', { url });
   await loaded;
   await sleep(500);
+  await setEndpoint(MOCK + '/ok');
 }
+
+// O index.html sai com data-endpoint vazio até a URL do Apps Script ser configurada.
+const setEndpoint = (url) => evaluate(`document.getElementById('form-simulacao').setAttribute('data-endpoint', ${JSON.stringify(url)});`);
+const sent = () => existsSync(MOCK_LOG) ? readFileSync(MOCK_LOG, 'utf8').trim().split('\n').filter(Boolean).map((l) => JSON.parse(l)) : [];
+const clearSent = () => writeFileSync(MOCK_LOG, '');
 
 async function shot(file, full = false) {
   const params = { format: 'png' };
@@ -158,9 +168,11 @@ const formState = () => evaluate(`const f = document.getElementById('form-simula
     formHidden: f.hidden,
     successVisible: !document.getElementById('form-sucesso').hidden,
     successText: document.getElementById('form-sucesso').innerText,
+    status: document.getElementById('form-status').hidden ? null : document.getElementById('form-status').textContent,
+    button: f.querySelector('button[type=submit]').textContent,
     active: document.activeElement.id || document.activeElement.tagName
   };`);
-const submit = async () => { await evaluate(`document.querySelector('#form-simulacao button[type=submit]').click();`); await sleep(200); };
+const submit = async (wait = 200) => { await evaluate(`document.querySelector('#form-simulacao button[type=submit]').click();`); await sleep(wait); };
 
 const results = { data: new Date().toISOString(), url: URL_BASE, testes: [] };
 const record = (grupo, nome, ok, detalhe) => { results.testes.push({ grupo, nome, ok, detalhe }); console.log(`${ok ? 'PASSOU' : 'FALHOU'} · ${grupo} · ${nome}`); };
@@ -223,8 +235,13 @@ for (const d of devices) {
   await scrollToEl('#whatsapp', -40); await sleep(300);
   await shot(join(dir, '07c-formulario-erros-e-aviso-450.png'));
   await fill({ whatsapp: '15991234567', cidade: 'Sorocaba', conta: '650' });
-  await submit();
-  await scrollToEl('#simulacao', d.mobile ? 700 : 0); await sleep(300);
+  await setEndpoint(CLOSED);
+  await submit(800);
+  await scrollToEl('#form-status', -40); await sleep(300);
+  await shot(join(dir, '07d-formulario-falha-de-envio.png'));
+  await setEndpoint(MOCK + '/ok');
+  await submit(800);
+  await scrollToEl('#simulacao', d.mobile ? 900 : 0); await sleep(300);
   await shot(join(dir, '08-formulario-sucesso.png'));
 }
 
@@ -342,33 +359,74 @@ await fill({ conta: '300' });
 s = await formState();
 record('Formulário', 'Conta abaixo de R$ 450 mostra aviso sem bloquear', s.belowNotice, { aviso: s.belowNotice });
 await fill({ nome: 'Ana Teste', whatsapp: '15991234567', cidade: 'Salto' });
-await submit();
+await submit(600);
 s = await formState();
 record('Formulário', 'Conta de R$ 300 ainda pode ser enviada', s.successVisible && !s.errors.conta, { sucesso: s.successVisible });
 
-for (const [file, nome, espera] of [['arquivo.txt', 'Arquivo .txt é recusado', true], ['grande.pdf', 'PDF acima de 10 MB é recusado', true], ['conta-teste.pdf', 'PDF pequeno é aceito', false]]) {
+for (const [file, nome, espera] of [['arquivo.txt', 'Arquivo .txt é recusado', true], ['grande.pdf', 'PDF de 5 MB (acima de 4,5 MB) é recusado', true], ['medio.pdf', 'PDF de 4,4 MB é aceito e enviado', false], ['conta-teste.pdf', 'PDF pequeno é aceito', false]]) {
   await load();
   await setFile(join(FIX, file));
   await fill({ nome: 'Ana Teste', whatsapp: '15991234567', cidade: 'Sorocaba', conta: '700' });
-  await submit();
+  await submit(1500);
   s = await formState();
   const nomeArquivo = await evaluate(`return document.getElementById('arquivo-nome').textContent;`);
   record('Formulário', nome, espera ? !!s.errors.arquivo && !s.successVisible : !s.errors.arquivo && s.successVisible, { erro: s.errors.arquivo || null, arquivoMostrado: nomeArquivo });
 }
 
+// Envio com sucesso: um POST text/plain com os campos e o anexo
 await load();
+clearSent();
 requests.length = 0;
-await fill({ nome: 'Ana Teste', whatsapp: '15991234567', cidade: 'Votorantim', conta: '650' });
+await fill({ nome: 'Ana Teste', whatsapp: '15991234567', cidade: 'Votorantim', conta: '1.200,50' });
 await setFile(join(FIX, 'conta-teste.pdf'));
-await submit();
-await sleep(500);
+await submit(1000);
 s = await formState();
-record('Formulário', 'Sucesso mostra WhatsApp no mesmo dia útil e visita sem compromisso', s.successVisible && s.formHidden && /WhatsApp/.test(s.successText) && /mesmo dia útil/.test(s.successText) && /sem compromisso/.test(s.successText), s.successText);
-record('Formulário', 'Sucesso deixa claro que nada foi enviado (demonstração)', /nenhum dado foi enviado/.test(s.successText), s.successText);
-record('Formulário', 'Nenhuma requisição de rede ao enviar (somente front-end)', requests.length === 0, requests.slice());
-await evaluate(`document.querySelector('[data-success-back]').click();`);
+let log = sent();
+const posts = requests.filter((r) => r.startsWith('POST'));
+record('Formulário', 'Envio faz um único POST ao endpoint, como texto simples (sem preflight)', posts.length === 1 && posts[0] === 'POST ' + MOCK + '/ok' && log.length === 1 && /^text\/plain/.test(log[0].contentType) && !requests.some((r) => r.startsWith('OPTIONS')), { requisicoes: requests.slice(), recebido: log });
+record('Formulário', 'Endpoint recebe nome, WhatsApp só com dígitos, cidade, conta em número e anexo', log[0]?.nome === 'Ana Teste' && log[0]?.whatsapp === '15991234567' && log[0]?.cidade === 'Votorantim' && log[0]?.conta === 1200.5 && log[0]?.site === '' && log[0]?.arquivo?.bytes === 20000 && log[0]?.arquivo?.tipo === 'application/pdf', log[0]);
+record('Formulário', 'Sucesso fala em WhatsApp da equipe, análise, até 24 horas e visita sem compromisso', s.successVisible && s.formHidden && /encaminhados ao WhatsApp/.test(s.successText) && /em análise/.test(s.successText) && /até 24 horas/.test(s.successText) && /sem compromisso/.test(s.successText), s.successText);
+record('Formulário', 'Sucesso mostra o primeiro nome e o WhatsApp informado', /Solicitação enviada, Ana\./.test(s.successText) && /\(15\) 99123-4567/.test(s.successText) && s.active === 'form-sucesso', s.successText);
+record('Formulário', 'Página não fala mais em "mesmo dia útil" nem em demonstração', await evaluate(`return !/mesmo dia útil|demonstração/i.test(document.body.innerText);`), null);
+
+// Falha de rede: mensagem clara, dados preservados, botão volta ao normal
+await load();
+await setEndpoint(CLOSED);
+await fill({ nome: 'Ana Teste', whatsapp: '15991234567', cidade: 'Itu', conta: '800' });
+await submit(1000);
 s = await formState();
-record('Formulário', '"Revisar meus dados" volta ao formulário com os dados', !s.formHidden && s.values.nome === 'Ana Teste' && s.active === 'nome', s.values);
+record('Formulário', 'Falha de rede mostra erro, mantém os dados e reativa o botão', !s.successVisible && /Não conseguimos enviar agora/.test(s.status || '') && s.values.nome === 'Ana Teste' && s.values.conta === '800' && s.button === 'Pedir minha simulação' && s.active === 'form-status', s);
+
+// Erro de validação do Apps Script: mostra a mensagem do servidor
+await setEndpoint(MOCK + '/erro');
+await submit(800);
+s = await formState();
+record('Formulário', 'Erro devolvido pelo Apps Script aparece para a pessoa', !s.successVisible && /Informe um WhatsApp válido/.test(s.status || '') && s.values.nome === 'Ana Teste', s.status);
+
+// Sem URL configurada: avisa que está indisponível e não finge sucesso
+await load();
+await setEndpoint('');
+clearSent();
+requests.length = 0;
+await fill({ nome: 'Ana Teste', whatsapp: '15991234567', cidade: 'Salto', conta: '800' });
+await submit(400);
+s = await formState();
+record('Formulário', 'Sem endpoint configurado, avisa que o envio está indisponível e não mostra sucesso', !s.successVisible && /indisponível/.test(s.status || '') && !requests.some((r) => r.startsWith('POST')), s.status);
+
+// Botão em estado de envio
+await load();
+await fill({ nome: 'Ana Teste', whatsapp: '15991234567', cidade: 'Salto', conta: '800' });
+await setFile(join(FIX, 'medio.pdf'));
+const busy = await evaluate(`document.querySelector('#form-simulacao button[type=submit]').click();
+  const b = document.querySelector('#form-simulacao button[type=submit]');
+  return { texto: b.textContent, desativado: b.disabled, busy: b.getAttribute('aria-busy') };`);
+await sleep(1500);
+record('Formulário', 'Durante o envio o botão mostra "Enviando…" e fica desativado', busy.texto === 'Enviando…' && busy.desativado && busy.busy === 'true', busy);
+
+// Campo isca: invisível e fora do Tab
+const hp = await evaluate(`const el = document.getElementById('site'); const b = el.getBoundingClientRect();
+  return { tabIndex: el.tabIndex, foraDaTela: b.right <= 0, ariaHidden: el.closest('.form__hp').getAttribute('aria-hidden') };`);
+record('Formulário', 'Campo isca fica fora da tela, do Tab e da leitura de tela', hp.tabIndex === -1 && hp.foraDaTela && hp.ariaHidden === 'true', hp);
 
 // Calculadora
 await load();

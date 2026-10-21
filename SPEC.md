@@ -23,7 +23,7 @@ Apresentar a Ravena Solar como uma integradora local com seis anos de atuação,
 4. **Investimento e economia:** explicar valores, economia esperada, financiamento e custos que permanecem na conta.
 5. **Execução e garantias:** apresentar as etapas (projeto, homologação com a distribuidora, instalação e acompanhamento), os prazos e a proteção contra infiltrações causadas pela instalação. Criar uma trilha dinâmica que vai dando check e mostre um tempo médio que condiga com o que está no brief.
 6. **Dúvidas frequentes:** responder sobre continuidade da empresa, telhado, cobrança sobre energia injetada, mudança de casa, dias nublados, funcionamento à noite e necessidade de bateria. Criar um FAQ ao final da landing page.
-7. **Formulário de simulação:** seção final da página, para onde levam o botão da abertura e o botão do cabeçalho. Repetir a chamada principal, mostrar os campos para o visitante preencher os dados e explicar o próximo passo. O cabeçalho mantém sempre visível a opção de ir ao formulário, a qualquer momento da rolagem. Apenas front-end (ver "Formulário e funcionamento").
+7. **Formulário de simulação:** seção final da página, para onde levam o botão da abertura e o botão do cabeçalho. Repetir a chamada principal, mostrar os campos para o visitante preencher os dados e explicar o próximo passo. O cabeçalho mantém sempre visível a opção de ir ao formulário, a qualquer momento da rolagem. Os pedidos vão para uma planilha (ver "Formulário e funcionamento").
 
 ## Conteúdo e limites das promessas
 
@@ -41,14 +41,22 @@ Não oferecer baterias nem serviços fora do escopo informado. Não inventar cli
 
 ## Formulário e funcionamento
 
-O objetivo da entrega é apenas a landing page. O formulário é **somente front-end**: não envia os dados a nenhum destino, backend ou serviço externo.
+Os pedidos chegam a uma Planilha Google por meio de um app da Web do Google Apps Script (`integracao/`). O site continua estático e gratuito na Vercel, sem backend próprio nem bibliotecas.
 
-- Campos obrigatórios: nome, WhatsApp, cidade e valor médio mensal da conta de luz. Foto ou PDF da conta é opcional.
-- Informar que contas abaixo de R$ 450 geralmente não justificam o investimento, sem bloquear automaticamente essas pessoas.
-- Validar os campos no navegador, mostrar erros claros e preservar o que foi digitado quando houver erro.
-- Ao enviar com os dados válidos, mostrar a mensagem de sucesso na própria página, sem transmitir nada. A mensagem informa que a resposta acontece por WhatsApp no mesmo dia útil e que a visita técnica é sem compromisso.
-- Nenhum dado digitado nem anexo é armazenado ou enviado; o anexo nunca entra no repositório.
-- A página não deve afirmar que a solicitação foi recebida pela Ravena Solar, pois não há destino real. Isso fica registrado como pendência fora do escopo (ver "Ficaram de fora").
+- Campos obrigatórios: nome, WhatsApp, cidade e valor médio mensal da conta de luz. Foto ou PDF da conta é opcional, com até 4,5 MB.
+- Informar que contas abaixo de R$ 450 geralmente não justificam o investimento, sem bloquear automaticamente essas pessoas. A planilha marca se a conta está a partir de R$ 450.
+- Validar os campos no navegador, mostrar erros claros e preservar o que foi digitado quando houver erro. O Apps Script valida de novo, porque a URL dele é pública.
+- Ao enviar, gravar uma linha na aba "Leads" (data, nome, WhatsApp, cidade, conta, faixa, link do anexo e status), salvar o anexo numa pasta privada do Drive e mandar um e-mail de aviso para a equipe.
+- Se o envio falhar, mostrar o erro e manter os dados no formulário. Sem a URL do app configurada, o formulário avisa que o envio está indisponível, em vez de fingir que enviou.
+- O passo a passo e a mensagem de sucesso explicam que os dados seguem para o WhatsApp da equipe, ficam em análise e que um consultor responde pelo WhatsApp informado em até 24 horas, nem sempre no mesmo dia. A visita técnica é sem compromisso.
+- Um campo isca, invisível para pessoas, descarta envios de robôs.
+- O anexo nunca entra no repositório.
+
+**Decisão:** usar o Apps Script, e não uma função na Vercel, porque ele grava direto na planilha e no Drive da conta Google, envia o e-mail sem serviço extra e não exige guardar credenciais. O anexo fica limitado a 4,5 MB, o mesmo teto de uma função gratuita da Vercel, para que a integração possa migrar para lá sem mudar o formulário.
+
+**Decisão:** o prazo de resposta passa de "no mesmo dia útil" (brief) para "em até 24 horas", a pedido do cliente.
+
+**Decisão (case):** o encaminhamento ao WhatsApp da equipe aparece só no texto da página; não há envio automático para o WhatsApp. O aviso real é o e-mail. Enviar de fato exigiria a WhatsApp Cloud API da Meta.
 
 ## Design e implementação
 
@@ -69,7 +77,7 @@ Verificar e registrar:
 - Comportamento com `prefers-reduced-motion` ativado.
 - Funcionamento dos botões, links e perguntas frequentes.
 - Botões "Pedir minha simulação" (abertura e cabeçalho) levando ao formulário.
-- Validação, mensagens de erro e mensagem de sucesso do formulário (front-end).
+- Validação, mensagens de erro, envio, falha de envio e mensagem de sucesso do formulário.
 - Correspondência entre as promessas da página e o brief.
 
 Registrar capturas de tela, resultados dos testes e eventuais pendências. Materiais ou configurações ausentes devem ser identificados, sem simular que estão funcionando.
@@ -94,4 +102,5 @@ O site antigo não será usado. Apenas a logo foi mantida.
 
 ### Integração do formulário
 
-- **Envio real dos dados (backend, e-mail, planilha ou CRM) e armazenamento de anexos:** fora do escopo, pois a entrega do case é apenas a landing page. Fica como pendência para uma etapa futura.
+- **Envio automático para o WhatsApp da empresa:** fora do escopo do case. A página menciona o encaminhamento, mas o aviso real chega por e-mail.
+- **CRM:** a planilha cumpre esse papel por enquanto, com a coluna "Status" para acompanhar cada lead.

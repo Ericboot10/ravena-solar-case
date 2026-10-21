@@ -346,17 +346,18 @@
           </header>
 
           <ol class="next" data-reveal>
-            <li><span class="next__n">1</span><p><strong>Você envia os dados.</strong> Leva menos de um minuto.</p></li>
-            <li><span class="next__n">2</span><p><strong>Respondemos por WhatsApp</strong> no mesmo dia útil.</p></li>
-            <li><span class="next__n">3</span><p><strong>Visita técnica ao telhado</strong>, sem compromisso.</p></li>
-            <li><span class="next__n">4</span><p><strong>Você recebe a proposta</strong> e decide no seu tempo.</p></li>
+            <li><span class="next__n">1</span><p><strong>Você envia seus dados.</strong> Nome, WhatsApp, cidade e valor da conta. Leva menos de um minuto.</p></li>
+            <li><span class="next__n">2</span><p><strong>Sua solicitação entra em análise.</strong> As informações seguem para o WhatsApp da nossa equipe técnica, que usa o seu consumo para dimensionar o sistema e estimar a economia.</p></li>
+            <li><span class="next__n">3</span><p><strong>Retorno em até 24 horas.</strong> Nem sempre no mesmo dia, mas dentro desse prazo: um consultor da Ravena Solar escreve para o WhatsApp que você informou e apresenta a simulação.</p></li>
+            <li><span class="next__n">4</span><p><strong>Visita técnica ao telhado</strong>, sem compromisso.</p></li>
+            <li><span class="next__n">5</span><p><strong>Você recebe a proposta</strong> e decide no seu tempo.</p></li>
           </ol>
 
           <p class="sim__fit" data-reveal>Contas abaixo de R$&nbsp;450 por mês geralmente não justificam o investimento. Você pode pedir mesmo assim, e vamos dizer com franqueza se vale a pena.</p>
         </div>
 
         <div class="form-card">
-          <form class="form" id="form-simulacao" novalidate aria-describedby="form-obrigatorios">
+          <form class="form" id="form-simulacao" novalidate aria-describedby="form-obrigatorios" data-endpoint="">
             <p class="form__req" id="form-obrigatorios">Campos marcados com * são obrigatórios.</p>
 
             <div class="form__summary" id="form-resumo" tabindex="-1" hidden>
@@ -409,19 +410,27 @@
                 <span class="file__btn" aria-hidden="true">Escolher arquivo</span>
                 <span class="file__name" id="arquivo-nome">Nenhum arquivo escolhido</span>
               </div>
-              <p class="field__hint" id="arquivo-dica">JPG, PNG, HEIC ou PDF, até 10 MB. Ajuda a simulação a sair mais precisa.</p>
+              <p class="field__hint" id="arquivo-dica">JPG, PNG, HEIC ou PDF, até 4,5 MB. Ajuda a simulação a sair mais precisa.</p>
               <p class="field__error" id="arquivo-erro" hidden></p>
             </div>
 
+            <!-- Campo isca contra robôs: fora da tela e fora da navegação por teclado -->
+            <div class="form__hp" aria-hidden="true">
+              <label for="site">Site</label>
+              <input id="site" name="site" type="text" tabindex="-1" autocomplete="off">
+            </div>
+
+            <p class="form__status" id="form-status" role="alert" tabindex="-1" hidden></p>
+
             <button class="btn btn--primary btn--lg btn--block" type="submit">Pedir minha simulação</button>
-            <p class="note form__demo">Versão de demonstração: o formulário valida os dados, mas não envia nem guarda nada.</p>
+            <p class="note form__privacy">Usamos seus dados apenas para preparar e enviar a sua simulação.</p>
           </form>
 
           <div class="success" id="form-sucesso" tabindex="-1" hidden>
-            <p class="success__title" id="sucesso-titulo">Dados conferidos, <span data-success-name></span>.</p>
-            <p>Próximo passo: a resposta acontece por WhatsApp, no mesmo dia útil. Depois, a visita técnica ao seu telhado é sem compromisso.</p>
-            <p class="note">Versão de demonstração: nenhum dado foi enviado à Ravena Solar.</p>
-            <button class="btn btn--ghost" type="button" data-success-back>Revisar meus dados</button>
+            <p class="success__title" id="sucesso-titulo">Solicitação enviada, <span data-success-name></span>.</p>
+            <p>Seus dados foram encaminhados ao WhatsApp da nossa equipe técnica e já estão em análise.</p>
+            <p>Em até 24 horas, nem sempre no mesmo dia, um consultor da Ravena Solar vai escrever para o número <strong data-success-phone></strong> com a sua simulação: tamanho do sistema, investimento e quanto a conta deve cair. Se fizer sentido para você, combinamos a visita técnica ao telhado, sem compromisso.</p>
+            <p class="note">Fique atento às mensagens nesse número.</p>
           </div>
         </div>
       </div>

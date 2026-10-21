@@ -109,7 +109,7 @@ Como o âmbar sobre branco não atinge 3:1 para elementos gráficos, a barra de 
 
 **FAQ.** Acordeão com `<button>` e `aria-expanded`/`aria-controls`; abre por clique, Enter e Espaço. Divisores `--line`. Fica no final da página, logo antes do formulário, que é a última seção (conforme o `SPEC.md`).
 
-**Formulário.** Seção final, para onde levam os botões. Label sempre visível acima do campo (nunca só placeholder). Campo com borda 1px `--navy` e altura mínima 48px. Foco: contorno 2px `--navy`. Erro: texto `--error` abaixo do campo, mais borda `--error` e ícone, sem depender só da cor. Os dados digitados são preservados quando há erro. Sucesso: bloco `--success` na própria página. Somente front-end; nada é enviado.
+**Formulário.** Seção final, para onde levam os botões. Label sempre visível acima do campo (nunca só placeholder). Campo com borda 1px `--navy` e altura mínima 48px. Foco: contorno 2px `--navy`. Erro: texto `--error` abaixo do campo, mais borda `--error` e ícone, sem depender só da cor. Os dados digitados são preservados quando há erro. Envio: o botão mostra "Enviando…" e fica desativado até a resposta. Falha de envio: bloco `--error` acima do botão, com foco, e os dados continuam nos campos. Sucesso: bloco `--success` na própria página, com o primeiro nome e o WhatsApp informado.
 
 ## Acessibilidade (resumo)
 

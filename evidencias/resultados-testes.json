@@ -1,6 +1,6 @@
 {
-  "data": "2026-10-19T13:30:21.617Z",
-  "url": "http://localhost:8765/",
+  "data": "2026-10-21T15:58:32.213Z",
+  "url": "http://127.0.0.1:8765/",
   "testes": [
     {
       "grupo": "Layout",
@@ -127,19 +127,19 @@
           "f": 0.25,
           "btnTop": 10,
           "visivel": true,
-          "progresso": "matrix(0.25, 0, 0, 1, 0, 0)"
+          "progresso": "matrix(0.249975, 0, 0, 1, 0, 0)"
         },
         {
           "f": 0.5,
           "btnTop": 10,
           "visivel": true,
-          "progresso": "matrix(0.5, 0, 0, 1, 0, 0)"
+          "progresso": "matrix(0.50005, 0, 0, 1, 0, 0)"
         },
         {
           "f": 0.75,
           "btnTop": 10,
           "visivel": true,
-          "progresso": "matrix(0.75, 0, 0, 1, 0, 0)"
+          "progresso": "matrix(0.750025, 0, 0, 1, 0, 0)"
         },
         {
           "f": 1,
@@ -155,9 +155,9 @@
       "ok": true,
       "detalhe": [
         "matrix(0, 0, 0, 1, 0, 0)",
-        "matrix(0.25, 0, 0, 1, 0, 0)",
-        "matrix(0.5, 0, 0, 1, 0, 0)",
-        "matrix(0.75, 0, 0, 1, 0, 0)",
+        "matrix(0.249975, 0, 0, 1, 0, 0)",
+        "matrix(0.50005, 0, 0, 1, 0, 0)",
+        "matrix(0.750025, 0, 0, 1, 0, 0)",
         "matrix(1, 0, 0, 1, 0, 0)"
       ]
     },
@@ -419,7 +419,9 @@
         "belowNotice": false,
         "formHidden": false,
         "successVisible": false,
-        "successText": "\n            Dados conferidos, .\n            Próximo passo: a resposta acontece por WhatsApp, no mesmo dia útil. Depois, a visita técnica ao seu telhado é sem compromisso.\n            Versão de demonstração: nenhum dado foi enviado à Ravena Solar.\n            Revisar meus dados\n          ",
+        "successText": "\n            Solicitação enviada, .\n            Seus dados foram encaminhados ao WhatsApp da nossa equipe técnica e já estão em análise.\n            Em até 24 horas, nem sempre no mesmo dia, um consultor da Ravena Solar vai escrever para o número  com a sua simulação: tamanho do sistema, investimento e quanto a conta deve cair. Se fizer sentido para você, combinamos a visita técnica ao telhado, sem compromisso.\n            Fique atento às mensagens nesse número.\n          ",
+        "status": null,
+        "button": "Pedir minha simulação",
         "active": "form-resumo"
       }
     },
@@ -560,11 +562,20 @@
     },
     {
       "grupo": "Formulário",
-      "nome": "PDF acima de 10 MB é recusado",
+      "nome": "PDF de 5 MB (acima de 4,5 MB) é recusado",
       "ok": true,
       "detalhe": {
-        "erro": "O arquivo tem mais de 10 MB. Envie uma versão menor.",
+        "erro": "O arquivo tem mais de 4,5 MB. Envie uma foto com menos resolução ou um PDF menor.",
         "arquivoMostrado": "grande.pdf"
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "PDF de 4,4 MB é aceito e enviado",
+      "ok": true,
+      "detalhe": {
+        "erro": null,
+        "arquivoMostrado": "Nenhum arquivo escolhido"
       }
     },
     {
@@ -573,36 +584,129 @@
       "ok": true,
       "detalhe": {
         "erro": null,
-        "arquivoMostrado": "conta-teste.pdf"
+        "arquivoMostrado": "Nenhum arquivo escolhido"
       }
     },
     {
       "grupo": "Formulário",
-      "nome": "Sucesso mostra WhatsApp no mesmo dia útil e visita sem compromisso",
-      "ok": true,
-      "detalhe": "Dados conferidos, Ana.\n\nPróximo passo: a resposta acontece por WhatsApp, no mesmo dia útil. Depois, a visita técnica ao seu telhado é sem compromisso.\n\nVersão de demonstração: nenhum dado foi enviado à Ravena Solar.\n\nRevisar meus dados"
-    },
-    {
-      "grupo": "Formulário",
-      "nome": "Sucesso deixa claro que nada foi enviado (demonstração)",
-      "ok": true,
-      "detalhe": "Dados conferidos, Ana.\n\nPróximo passo: a resposta acontece por WhatsApp, no mesmo dia útil. Depois, a visita técnica ao seu telhado é sem compromisso.\n\nVersão de demonstração: nenhum dado foi enviado à Ravena Solar.\n\nRevisar meus dados"
-    },
-    {
-      "grupo": "Formulário",
-      "nome": "Nenhuma requisição de rede ao enviar (somente front-end)",
-      "ok": true,
-      "detalhe": []
-    },
-    {
-      "grupo": "Formulário",
-      "nome": "\"Revisar meus dados\" volta ao formulário com os dados",
+      "nome": "Envio faz um único POST ao endpoint, como texto simples (sem preflight)",
       "ok": true,
       "detalhe": {
+        "requisicoes": [
+          "POST http://127.0.0.1:8766/ok",
+          "GET http://127.0.0.1:8766/resposta"
+        ],
+        "recebido": [
+          {
+            "path": "/ok",
+            "contentType": "text/plain;charset=utf-8",
+            "bytesBody": 26834,
+            "nome": "Ana Teste",
+            "whatsapp": "15991234567",
+            "cidade": "Votorantim",
+            "conta": 1200.5,
+            "site": "",
+            "arquivo": {
+              "nome": "conta-teste.pdf",
+              "tipo": "application/pdf",
+              "bytes": 20000
+            }
+          }
+        ]
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Endpoint recebe nome, WhatsApp só com dígitos, cidade, conta em número e anexo",
+      "ok": true,
+      "detalhe": {
+        "path": "/ok",
+        "contentType": "text/plain;charset=utf-8",
+        "bytesBody": 26834,
         "nome": "Ana Teste",
-        "whatsapp": "(15) 99123-4567",
+        "whatsapp": "15991234567",
         "cidade": "Votorantim",
-        "conta": "650"
+        "conta": 1200.5,
+        "site": "",
+        "arquivo": {
+          "nome": "conta-teste.pdf",
+          "tipo": "application/pdf",
+          "bytes": 20000
+        }
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Sucesso fala em WhatsApp da equipe, análise, até 24 horas e visita sem compromisso",
+      "ok": true,
+      "detalhe": "Solicitação enviada, Ana.\n\nSeus dados foram encaminhados ao WhatsApp da nossa equipe técnica e já estão em análise.\n\nEm até 24 horas, nem sempre no mesmo dia, um consultor da Ravena Solar vai escrever para o número (15) 99123-4567 com a sua simulação: tamanho do sistema, investimento e quanto a conta deve cair. Se fizer sentido para você, combinamos a visita técnica ao telhado, sem compromisso.\n\nFique atento às mensagens nesse número."
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Sucesso mostra o primeiro nome e o WhatsApp informado",
+      "ok": true,
+      "detalhe": "Solicitação enviada, Ana.\n\nSeus dados foram encaminhados ao WhatsApp da nossa equipe técnica e já estão em análise.\n\nEm até 24 horas, nem sempre no mesmo dia, um consultor da Ravena Solar vai escrever para o número (15) 99123-4567 com a sua simulação: tamanho do sistema, investimento e quanto a conta deve cair. Se fizer sentido para você, combinamos a visita técnica ao telhado, sem compromisso.\n\nFique atento às mensagens nesse número."
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Página não fala mais em \"mesmo dia útil\" nem em demonstração",
+      "ok": true,
+      "detalhe": null
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Falha de rede mostra erro, mantém os dados e reativa o botão",
+      "ok": true,
+      "detalhe": {
+        "values": {
+          "nome": "Ana Teste",
+          "whatsapp": "(15) 99123-4567",
+          "cidade": "Itu",
+          "conta": "800"
+        },
+        "errors": {},
+        "invalid": [],
+        "summaryVisible": false,
+        "summary": [],
+        "belowNotice": false,
+        "formHidden": false,
+        "successVisible": false,
+        "successText": "\n            Solicitação enviada, .\n            Seus dados foram encaminhados ao WhatsApp da nossa equipe técnica e já estão em análise.\n            Em até 24 horas, nem sempre no mesmo dia, um consultor da Ravena Solar vai escrever para o número  com a sua simulação: tamanho do sistema, investimento e quanto a conta deve cair. Se fizer sentido para você, combinamos a visita técnica ao telhado, sem compromisso.\n            Fique atento às mensagens nesse número.\n          ",
+        "status": "Não conseguimos enviar agora. Seus dados continuam no formulário; confira a conexão e tente de novo.",
+        "button": "Pedir minha simulação",
+        "active": "form-status"
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Erro devolvido pelo Apps Script aparece para a pessoa",
+      "ok": true,
+      "detalhe": "Informe um WhatsApp válido, com DDD. Corrija e envie de novo."
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Sem endpoint configurado, avisa que o envio está indisponível e não mostra sucesso",
+      "ok": true,
+      "detalhe": "O envio está indisponível no momento. Seus dados continuam no formulário; tente de novo mais tarde."
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Durante o envio o botão mostra \"Enviando…\" e fica desativado",
+      "ok": true,
+      "detalhe": {
+        "texto": "Enviando…",
+        "desativado": true,
+        "busy": "true"
+      }
+    },
+    {
+      "grupo": "Formulário",
+      "nome": "Campo isca fica fora da tela, do Tab e da leitura de tela",
+      "ok": true,
+      "detalhe": {
+        "tabIndex": -1,
+        "foraDaTela": true,
+        "ariaHidden": "true"
       }
     },
     {

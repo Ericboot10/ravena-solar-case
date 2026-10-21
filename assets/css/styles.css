@@ -627,7 +627,20 @@ main:focus { outline: none; }
 @media (min-width: 600px) { .form-card { padding: var(--s6); } }
 .form { display: grid; gap: var(--s5); }
 .form__req { font-size: 14px; color: var(--text-muted); }
-.form__demo { text-align: center; }
+.form__privacy { text-align: center; }
+.form__hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.form__status {
+  padding: var(--s4);
+  border: 1px solid var(--error);
+  border-left-width: 4px;
+  border-radius: var(--r2);
+  color: var(--error);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.form__status:focus { outline: 2px solid var(--navy); outline-offset: 2px; }
+.btn[aria-busy="true"] { cursor: progress; opacity: .85; transform: none; }
 
 .form__summary {
   padding: var(--s4);

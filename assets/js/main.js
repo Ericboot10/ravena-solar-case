@@ -278,7 +278,7 @@
     render();
   }
 
-  /* Formulário (somente front-end: nada é enviado nem guardado) ----------- */
+  /* Formulário: envia para o app da Web do Apps Script (integracao/) ------ */
   function initForm() {
     var form = document.getElementById('form-simulacao');
     if (!form) return;
@@ -287,7 +287,11 @@
     var phone = form.elements.whatsapp;
     var bill = form.elements.conta;
     var billNotice = document.getElementById('conta-aviso');
-    var MAX_FILE = 10 * 1024 * 1024;
+    var status = document.getElementById('form-status');
+    var button = form.querySelector('button[type="submit"]');
+    var buttonText = button.textContent;
+    var sending = false;
+    var MAX_FILE = 4.5 * 1024 * 1024; // limite do Apps Script e do texto da página
     var FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/heic', 'image/heif', 'image/webp'];
 
     function digits(v) { return v.replace(/\D/g, ''); }
@@ -338,7 +342,7 @@
         if (!f) return '';
         var okType = FILE_TYPES.indexOf(f.type) > -1 || /\.(pdf|jpe?g|png|heic|heif|webp)$/i.test(f.name);
         if (!okType) return 'Envie uma foto (JPG, PNG, HEIC) ou um PDF.';
-        if (f.size > MAX_FILE) return 'O arquivo tem mais de 10 MB. Envie uma versão menor.';
+        if (f.size > MAX_FILE) return 'O arquivo tem mais de 4,5 MB. Envie uma foto com menos resolução ou um PDF menor.';
         return '';
       }
     };
@@ -417,17 +421,88 @@
       }
 
       summary.hidden = true;
-      // Demonstração: nada é transmitido. Os dados continuam só neste formulário.
-      success.querySelector('[data-success-name]').textContent = form.elements.nome.value.trim().split(/\s+/)[0];
+      send();
+    });
+
+    function readFile(f) {
+      return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function () { resolve(String(reader.result).split(',')[1] || ''); };
+        reader.onerror = function () { reject(reader.error); };
+        reader.readAsDataURL(f);
+      });
+    }
+
+    function setSending(on) {
+      sending = on;
+      button.disabled = on;
+      button.setAttribute('aria-busy', on ? 'true' : 'false');
+      button.textContent = on ? 'Enviando…' : buttonText;
+    }
+
+    function showStatus(msg) {
+      status.textContent = msg;
+      status.hidden = !msg;
+      if (msg) status.focus();
+    }
+
+    function send() {
+      if (sending) return;
+      var endpoint = form.getAttribute('data-endpoint');
+      if (!endpoint) {
+        showStatus('O envio está indisponível no momento. Seus dados continuam no formulário; tente de novo mais tarde.');
+        return;
+      }
+
+      showStatus('');
+      setSending(true);
+      var f = fileInput.files && fileInput.files[0];
+      var data = {
+        nome: form.elements.nome.value.trim(),
+        whatsapp: digits(phone.value),
+        cidade: form.elements.cidade.value,
+        conta: parseMoney(bill.value),
+        site: form.elements.site.value,
+        arquivo: null
+      };
+
+      (f ? readFile(f) : Promise.resolve(null))
+        .then(function (base64) {
+          if (base64) data.arquivo = { nome: f.name, tipo: f.type, base64: base64 };
+          var ctrl = new AbortController();
+          var timer = setTimeout(function () { ctrl.abort(); }, 60000);
+          // text/plain evita a requisição prévia (preflight), que o Apps Script não responde.
+          return fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(data),
+            signal: ctrl.signal
+          }).finally(function () { clearTimeout(timer); });
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (res) {
+          if (!res || !res.ok) throw new Error((res && res.erro) || '');
+          showSuccess(data);
+        })
+        .catch(function (err) {
+          // Erro com mensagem vem da validação do Apps Script; o resto é rede ou tempo esgotado.
+          var server = err && err.name === 'Error' && err.message;
+          showStatus(server
+            ? server + ' Corrija e envie de novo.'
+            : 'Não conseguimos enviar agora. Seus dados continuam no formulário; confira a conexão e tente de novo.');
+        })
+        .then(function () { setSending(false); });
+    }
+
+    function showSuccess(data) {
+      success.querySelector('[data-success-name]').textContent = data.nome.split(/\s+/)[0];
+      success.querySelector('[data-success-phone]').textContent = maskPhone(data.whatsapp);
+      form.reset();
+      fileName.textContent = 'Nenhum arquivo escolhido';
+      billNotice.hidden = true;
       form.hidden = true;
       success.hidden = false;
       success.focus();
-    });
-
-    success.querySelector('[data-success-back]').addEventListener('click', function () {
-      success.hidden = true;
-      form.hidden = false;
-      form.elements.nome.focus();
-    });
+    }
   }
 })();

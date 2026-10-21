@@ -10,11 +10,12 @@ Landing page de energia solar residencial para a Ravena Solar, integradora de So
 |---|---|
 | `index.html` | A página |
 | `assets/css/styles.css` | Estilos, com os tokens do `DESIGN.md` |
-| `assets/js/main.js` | Rolagem dinâmica, gráfico, trilha, FAQ, calculadora e formulário |
+| `assets/js/main.js` | Rolagem dinâmica, gráfico, trilha, FAQ, calculadora e envio do formulário |
 | `material/logo.svg` | Logo original da empresa (única peça reaproveitada do site antigo) |
 | `SPEC.md` | O que foi decidido e por quê, incluindo o que ficou de fora |
 | `DESIGN.md` | Cores, tipografia, espaçamentos e componentes |
 | `CLAUDE.md` | Regras de trabalho para o Claude Code neste projeto |
+| `integracao/` | Script do Google Apps Script que recebe os pedidos e guia de configuração da planilha |
 | `evidencias/` | Relatório de verificação, capturas de celular e desktop, resultados e script dos testes |
 | `vercel.json`, `.vercelignore` | Publicação na Vercel |
 
@@ -43,5 +44,6 @@ Veja [`evidencias/VERIFICACAO.md`](evidencias/VERIFICACAO.md): testes automatiza
 
 ## Limites desta entrega
 
-- O formulário é **somente front-end**. Ele valida os dados e mostra o próximo passo, mas não envia nem guarda nada. A própria página avisa que é uma demonstração.
+- O formulário envia os pedidos para uma Planilha Google pelo Apps Script e avisa por e-mail. A configuração (uma vez, na conta Google) está em [`integracao/README.md`](integracao/README.md). Sem ela, o formulário mostra que o envio está indisponível.
+- O texto da página fala em encaminhamento ao WhatsApp da equipe, mas, por ser um case, não há envio automático para o WhatsApp.
 - O brief original da prática não está no repositório.

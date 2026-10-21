@@ -1,8 +1,10 @@
 # Verificação: landing page Ravena Solar
 
-Data: 19/10/2026. Ambiente: macOS 26.6.2, Google Chrome 155 (headless, via DevTools Protocol) e o navegador do Claude Desktop, com a página servida localmente (`python3 -m http.server 8765`).
+Data: 19/10/2026, atualizada em 21/10/2026 com a integração do formulário com a planilha. Ambiente: macOS 26.6.2, Google Chrome 155 (headless, via DevTools Protocol) e o navegador do Claude Desktop, com a página servida localmente (`python3 -m http.server 8765 --bind 127.0.0.1`).
 
-**Resultado: 55 de 55 testes automatizados passaram.** Os detalhes de cada teste estão em [`resultados-testes.json`](resultados-testes.json).
+**Resultado: 62 de 62 testes automatizados da página e 13 de 13 testes do Apps Script passaram.** Os detalhes de cada teste da página estão em [`resultados-testes.json`](resultados-testes.json).
+
+O envio foi testado contra um **endpoint local que imita o app da Web do Apps Script** ([`endpoint-teste.py`](endpoint-teste.py)): ele recebe o POST, grava o que chegou e redireciona para a resposta, como o Google faz. O script do Apps Script foi testado em Node, com planilha, Drive e e-mail simulados ([`verificar-apps-script.mjs`](verificar-apps-script.mjs)). **Ainda falta o teste de ponta a ponta com a planilha real**, que depende da implantação na conta Google (ver "Pendências").
 
 ## Como repetir
 
@@ -10,13 +12,16 @@ Data: 19/10/2026. Ambiente: macOS 26.6.2, Google Chrome 155 (headless, via DevTo
 2. Crie uma pasta de arquivos de teste **fora do repositório** com:
    - `conta-teste.pdf`: um PDF pequeno qualquer;
    - `arquivo.txt`: um texto qualquer;
-   - `grande.pdf`: um arquivo acima de 10 MB (por exemplo, `mkfile -n 11m grande.pdf`).
+   - `medio.pdf`: um arquivo de 4,4 MB, abaixo do limite (por exemplo, `mkfile -n 4400k medio.pdf`);
+   - `grande.pdf`: um arquivo acima de 4,5 MB (por exemplo, `mkfile -n 5m grande.pdf`).
 
    Esses anexos de teste não entram no repositório.
-3. Rode:
+3. Em outro terminal, suba o endpoint de teste: `python3 evidencias/endpoint-teste.py <arquivo-de-log>`.
+4. Rode:
    ```bash
-   node --experimental-websocket evidencias/verificar.mjs http://127.0.0.1:8765/ evidencias <pasta-dos-arquivos-de-teste>
+   node --experimental-websocket evidencias/verificar.mjs http://127.0.0.1:8765/ evidencias <pasta-dos-arquivos-de-teste> http://127.0.0.1:8766 <arquivo-de-log>
    ```
+5. Para o Apps Script: `node evidencias/verificar-apps-script.mjs integracao/apps-script.gs`.
 
 O script [`verificar.mjs`](verificar.mjs) não tem dependências: ele abre o Chrome em modo headless, tira as capturas e grava o JSON.
 
@@ -39,7 +44,8 @@ As capturas ficam em `capturas/celular/` (390 × 844, densidade 2x, emulação d
 | `07a-formulario.png` | Formulário vazio com os próximos passos |
 | `07b-formulario-erros-vazio.png` | Envio vazio: resumo de erros e mensagens em cada campo |
 | `07c-formulario-erros-e-aviso-450.png` | WhatsApp incompleto, cidade vazia e aviso de conta abaixo de R$ 450 (sem bloquear) |
-| `08-formulario-sucesso.png` | Mensagem de sucesso com o aviso de que é uma demonstração |
+| `07d-formulario-falha-de-envio.png` | Falha de rede: mensagem de erro acima do botão, com os dados mantidos |
+| `08-formulario-sucesso.png` | Sucesso: encaminhamento ao WhatsApp da equipe, análise, retorno em até 24 horas e o número informado |
 
 ## Testes automatizados
 
@@ -51,7 +57,7 @@ As capturas ficam em `capturas/celular/` (390 × 844, densidade 2x, emulação d
 | Botões | Botão do cabeçalho, botão da abertura e link "Quero o cálculo" levam ao formulário e põem o foco no campo Nome | 3/3 |
 | FAQ | As 7 perguntas abrem e fecham por clique; abre com Enter e fecha com Espaço; `aria-expanded` atualizado | 2/2 |
 | Teclado | Tab começa em "Pular para o conteúdo", segue logo, menu e botões com contorno de foco de 2px; no formulário, a ordem é Nome → WhatsApp → Cidade → Conta → Arquivo → Enviar | 2/2 |
-| Formulário | Envio vazio mostra os 4 erros e foca o resumo; mostra erro claro para nome com 1 letra, WhatsApp com 9 dígitos, celular sem 9, conta com letras, conta zero e conta acima de R$ 100 mil; recusa `.txt` e PDF acima de 10 MB e aceita PDF pequeno; preserva os dados após erro; aceita "1.200,50"; aplica a máscara do WhatsApp; conta de R$ 300 mostra o aviso e **ainda pode ser enviada**; o sucesso fala em WhatsApp no mesmo dia útil e visita sem compromisso, deixa claro que nada foi enviado e **não faz nenhuma requisição de rede**; "Revisar meus dados" volta com os dados preenchidos | 19/19 |
+| Formulário | Envio vazio mostra os 4 erros e foca o resumo; mostra erro claro para nome com 1 letra, WhatsApp com 9 dígitos, celular sem 9, conta com letras, conta zero e conta acima de R$ 100 mil; recusa `.txt` e PDF de 5 MB, aceita e envia PDF de 4,4 MB e PDF pequeno; preserva os dados após erro; aceita "1.200,50"; aplica a máscara do WhatsApp; conta de R$ 300 mostra o aviso e **ainda pode ser enviada**; o envio faz **um único POST `text/plain`** (sem requisição prévia) com nome, WhatsApp só com dígitos, cidade, conta em número e anexo; o sucesso fala em WhatsApp da equipe, análise, até 24 horas e visita sem compromisso, com o primeiro nome e o número informado; a página não fala mais em "mesmo dia útil" nem em demonstração; falha de rede e erro devolvido pelo Apps Script aparecem com os dados mantidos; sem endpoint configurado, avisa que o envio está indisponível e não mostra sucesso; o botão mostra "Enviando…" e fica desativado durante o envio; o campo isca fica fora da tela, do Tab e da leitura de tela | 26/26 |
 | Calculadora | R$ 600 dá economia de R$ 450 a R$ 540/mês (75% a 90%); o aviso aparece abaixo de R$ 450 e some em R$ 450 | 2/2 |
 | Caso real | O gráfico vai de R$ 780 (início) a R$ 200 (meio) e R$ 118 (fim) conforme a rolagem; valores finais de 85%, R$ 662 e R$ 7.944 | 2/2 |
 | Execução | As etapas concluídas vão de 0 a 2, 3 e 4 conforme a rolagem | 1/1 |
@@ -95,7 +101,7 @@ Calculado a partir dos tokens do `DESIGN.md`:
 | Garantias de 25, 10 e 5 anos, com infiltração causada pela obra | Garantias, FAQ do telhado |
 | Financiamento com dois bancos e entrada zero sujeita aos bancos | Investimento |
 | Contas abaixo de R$ 450 geralmente não compensam, sem bloquear | Abertura, calculadora, seção do formulário, aviso no campo |
-| Resposta por WhatsApp no mesmo dia útil; visita sem compromisso | Próximos passos e mensagem de sucesso |
+| Resposta por WhatsApp em até 24 horas (prazo alterado a pedido do cliente; o brief dizia "no mesmo dia útil"); visita sem compromisso | Próximos passos e mensagem de sucesso |
 | Não vende bateria | FAQ |
 
 Ficaram fora, por decisão registrada no `SPEC.md`: ticket médio, sistema típico, detalhamento da conta residual, fotos, vídeos e assistência autorizada (sem material disponível), três tamanhos de proposta, acompanhamento no primeiro ano e limites de atendimento. O teste "Promessas" confirma que nenhum deles aparece. A página também não usa "grátis", "sustentabilidade", "energia do futuro", "revolução solar", promessa de 95% nem urgência artificial.
@@ -111,7 +117,25 @@ Ficaram fora, por decisão registrada no `SPEC.md`: ticket médio, sistema típi
 7. O botão de arquivo aparecia em inglês ("Choose File"). Foi substituído por "Escolher arquivo".
 8. O campo de valor tinha borda dupla, e o "R$ 7.944" tinha um espaço grande antes do número. Os dois foram corrigidos.
 
+## Apps Script (`integracao/apps-script.gs`)
+
+Testado em Node com os serviços do Google simulados: 13 de 13 testes passaram.
+
+| O que foi verificado |
+|---|
+| Pedido válido grava o cabeçalho e a linha (WhatsApp formatado, faixa "Sim", status "Novo") e envia o e-mail para a dona da conta |
+| A propriedade `EMAIL_AVISO` define o destino do e-mail; conta abaixo de R$ 450 fica marcada "Não" e o e-mail avisa; o anexo é salvo na pasta e o link vai para a planilha |
+| Anexo acima de 4,5 MB e tipo de arquivo inválido são recusados com mensagem |
+| Nome curto, WhatsApp curto, cidade fora da lista, conta zero e conta em texto são recusados sem gravar |
+| Campo isca preenchido responde "ok" sem gravar nem enviar e-mail |
+| Nome começando com `=` é gravado como texto, não como fórmula |
+| Corpo que não é JSON devolve um erro genérico; `doGet` responde "ok" |
+
+Problema encontrado e corrigido nesta rodada: o teste do PDF de 4,4 MB travava o script de verificação, porque o Chrome repassava o corpo inteiro do POST (6 MB em base64) pela conexão de depuração. O `verificar.mjs` agora limita esse repasse (`maxPostDataSize`). O envio em si funcionava: o endpoint de teste recebeu o arquivo inteiro.
+
 ## Publicação
+
+> As conferências abaixo são da versão de 19/10/2026, ainda sem a integração com a planilha. A versão nova ainda não foi publicada.
 
 A página está publicada na Vercel em <https://ravena-solar-case.vercel.app/>. Em 19/10/2026, logo após o deploy de produção do commit `2e988fb` (lista de permissão no `.vercelignore`), as respostas da URL foram conferidas com `curl`:
 
@@ -144,7 +168,10 @@ Em produção, o envio do formulário também não fez nenhuma requisição de r
 
 - **Celular e desktop reais:** a página publicada foi testada no Chrome com emulação de celular (390 × 844) e em desktop (1440 × 900), mas não em um aparelho físico.
 - **O repositório [Ericboot10/ravena-solar-case](https://github.com/Ericboot10/ravena-solar-case) não inclui o `brief.md`**, que é material da prática; ele fica só na máquina local.
-- **O formulário não tem destino real**, por decisão do SPEC (somente front-end). Não houve, nem pode haver, "recebimento real da solicitação". A página avisa que é uma demonstração.
+- **Implantar o Apps Script e configurar a URL:** o `data-endpoint` do formulário está vazio até o app da Web ser implantado na conta Google (passo a passo em [`integracao/README.md`](../integracao/README.md)). Até lá, o formulário avisa que o envio está indisponível.
+- **Teste de ponta a ponta com a planilha real:** depois da implantação, enviar um pedido com e sem anexo e conferir a linha na planilha, o arquivo no Drive e o e-mail de aviso. Os testes desta rodada usaram um endpoint local e serviços simulados.
+- **WhatsApp:** a página diz que os dados vão ao WhatsApp da equipe, mas não há envio automático (decisão do case, registrada no `SPEC.md`). O aviso real é o e-mail.
+- **Publicar a versão nova** na Vercel e repetir a bateria em produção.
 - **Testado só no Chrome.** Faltam Safari (macOS e iPhone real), Firefox e leitores de tela reais (VoiceOver, NVDA). A acessibilidade foi checada pela estrutura (labels, `aria-*`, ordem de foco, contraste), não com um leitor de tela.
 - **Números em Georgia:** os algarismos têm larguras diferentes, então os contadores variam de largura durante a animação. O efeito é contido pelo alinhamento à direita, mas não é zero.
 - **Caso real:** não existe série mês a mês no brief. O gráfico mostra só o antes (R$ 780) e a média depois (R$ 118); os valores intermediários aparecem apenas durante a animação.
